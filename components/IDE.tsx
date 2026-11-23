@@ -1,15 +1,46 @@
 "use client";
 import { Editor } from "@monaco-editor/react";
-import React, { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const IDE = () => {
-  const [Code, setCode] = useState("");
+  const [content, setContent] = useState("");
   const [language, setLanguage] = useState("javascript");
+  const [title, setTitle] = useState("Title");
+
+  const [showInput, setShowInput] = useState(false);
+  const inputref = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (showInput) {
+      inputref.current?.focus();
+    }
+  }, [showInput]);
   return (
     <div>
+      <h1
+        className={`text-5xl font-bold cursor-pointer ${showInput && "hidden"}`}
+        onClick={() => {
+          setShowInput((c) => !c);
+        }}
+      >
+        {title}
+      </h1>
+      <input
+        ref={inputref}
+        value={title}
+        type="text"
+        onChange={(e) => setTitle(e.target.value)}
+        className={`${!showInput && "hidden"} text-5xl max-w-fit`}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            setShowInput(false);
+          }
+        }}
+      />
+
       <button
         onClick={async () => {
-          await navigator.clipboard.writeText(Code);
+          await navigator.clipboard.writeText(content);
         }}
         className="border border-white p-1 rounded-lg cursor-pointer mb-2"
       >
@@ -30,7 +61,7 @@ const IDE = () => {
         language={language}
         theme="vs-dark"
         height={"50vh"}
-        onChange={(value) => setCode(value || "")}
+        onChange={(value) => setContent(value || "")}
         options={{
           fontSize: 14,
           wordWrap: "on",

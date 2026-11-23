@@ -1,5 +1,5 @@
 import React from "react";
-import IDE from "./components/IDE";
+import IDE from "../components/IDE";
 
 const Page = () => {
   return (
