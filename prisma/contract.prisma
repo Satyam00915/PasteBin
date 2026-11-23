@@ -1,0 +1,11 @@
+// use prisma-8
+
+model Snippet {
+  id Uuid @id @onCreate(uuid())
+  url String @unique
+  content String
+  title String
+  language String @default("javascript")
+  createdAt DateTime @onCreate(now())
+  updatedAt DateTime @onCreate(now()) @onUpdate(now())
+}
